@@ -1,0 +1,399 @@
+2004-09-26 11:27  jmates
+
+	* README (1.2), lib/XML/ApplyXSLT.pm (1.35),
+	lib/XML/ApplyXSLT/Apache.pm (1.12): Released module into public
+	domain.
+
+2004-07-19 17:55  jmates
+
+	* t/1.t (1.20): Comment fix.
+
+2004-07-17 01:10  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.11): Disable processing if no
+	filedata found. Fix on content_type check (did not work on
+	sial.org, undebugged), removal of searchbot from web client search
+	list.
+
+2004-07-06 13:18  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.10): Disable complete_attributes
+	(seeing DTD file hits on sial.org). Only handle application/xml
+	type files. Tweaked browser ID array, better browser ID handling.
+
+2004-07-06 13:18  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.34): Version bump for Apache.pm changes.
+
+2004-07-05 23:50  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.9): Set port to default if not
+	set.
+
+2004-07-05 22:35  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.8): Added rudimentary User-Agent
+	to style mapping.
+
+2004-07-05 18:11  jmates
+
+	* t/1.t (1.19): Configure libxml2 not to fetch remote DTD by
+	default, moved configure test before document parsing.
+
+2004-07-05 18:11  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.7): Configure libxml2 not to fetch
+	remote DTD by default. Added some documentation.
+
+2004-07-05 18:10  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.33): Fiddled with DTD handling.
+
+2004-07-05 15:52  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.6): URI processing and setting of
+	additional parameters. More doohickery with leading and trailing
+	slashes problem.
+
+2004-07-05 13:56  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.5): Skip on directory index, taint
+	checks on style=foo input, read mtime from XML file properly,
+	header generation and response handling tweaks.
+
+2004-07-05 13:55  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.32): No longer strip slashes off dirname
+	and subdir.
+
+2004-07-05 00:33  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.4): Quick parse of style from
+	request URI.
+
+2004-07-04 23:53  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.31): Leave on leading slash on subdir, in
+	event subdir is empty, so can avoid // issues via
+	http://example.org%{subdir}/%{filename}.
+
+2004-07-04 23:38  jmates
+
+	* lib/XML/: ApplyXSLT.pm (1.30), ApplyXSLT/Apache.pm (1.3): Version
+	bump to install Apache.pm. Fix on subdir macro to remove trailing
+	slashes. Fix on Apache.pm to load $file.
+
+2004-07-04 22:35  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.2): Initial write up of skeleton
+	code to parse and present document. Untested.
+
+2004-07-04 09:26  jmates
+
+	* MANIFEST (1.11): Added Apache.pm.
+
+2004-07-04 09:25  jmates
+
+	* lib/XML/ApplyXSLT/Apache.pm (1.1): Stub code and documentation.
+
+2004-07-03 22:59  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.29): Added untested 'subdir' and
+	'parentdir' support to filedata() for URI or chroot needs:
+	filesystem has /var/www/htdocs/foo/bar/zot.xml, want 'subdir' to be
+	"foo/bar" so can construct http://example.org/foo/bar/zot.xml
+	properly.
+
+2004-07-03 22:21  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.28): Notes on expand() method, other
+	method documentation fiddling.
+
+2004-07-03 21:22  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.27): Fix on filename suffix to work
+	properly with dot files. Added expand() method to do macro
+	expasion, used by get_style and exposed to allow caller expansion
+	of XSL params.
+
+2004-06-27 14:53  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.26): Moved filedata() method closer to
+	related docdata() method. More efficient token processing while
+	loading rules. Disabled macro expansion on param in get_style (need
+	to revisit this handling).  Expanded POD section.
+
+2004-06-26 10:15  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.25): Bugfix on macro expansion of XSL
+	parameter values.
+
+2004-06-25 05:44  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.24): Better processing of key=value pairs
+	from rules file: allow null values, enforce limits on key names.
+	Might need to loosen up key limits to match XSL parameter names?
+
+2004-06-24 21:30  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.23): More use of 'default' instead of
+	'prefs'. Support for macro expansion on param values.
+
+2004-06-24 20:57  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.22), t/1.t (1.18): Renamed 'prefs' to
+	'default' as argument to transform() for compatibility with rule
+	routines.
+
+2004-06-24 19:20  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.21), t/1.t (1.17): Bugfixes, improvements
+	to defaults and parameter processing.
+
+2004-06-24 10:26  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.20): Bugfixes should have caught with
+	testing before commiting.
+
+2004-06-24 10:19  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.19): Improved rule token parsing to
+	support global options on test-free rules, and to process either
+	defaults or XSL params for future use.
+
+2004-06-23 22:28  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.18): Use better lex-like scanner to parse
+	rules file: better support for single and double quoted strings,
+	removes need to backslash spaces in tokens. Perltidy.
+
+2004-06-20 17:19  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.17), t/1.t (1.16), t/pi.xml (1.3),
+	t/x.xml (1.3): Reworked DOCTYPE docdata processing to use public ID
+	(doctype) or URI (doctype_uri) details instead of rootname, which
+	must be same as XML rootname according to XML specification. Fixes
+	and tests for changes.
+
+2004-06-20 15:31  jmates
+
+	* MANIFEST (1.10), t/pi.xml (1.2), t/xml.dtd (1.1): External DTD
+	and reference to from pi.xml.
+
+2004-06-20 15:27  jmates
+
+	* MANIFEST (1.9), t/test.html (1.1): Added XHTML document to cover
+	DOCTYPE tests of PUBLIC strings.
+
+2004-06-19 14:15  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.16), t/1.t (1.15): Added ruleset loading
+	and parsing methods to map document metadata to class and style
+	preference information via rules(), apply_rules(), and study()
+	methods. New filedata() method to parse filename metadata. Pass XML
+	document by reference instead of storing it in object. Interface
+	changes to new() and transform().
+
+2004-06-18 19:20  jmates
+
+	* MANIFEST (1.8), t/rules (1.1): Added minimal ruleset file.
+
+2004-06-16 22:12  jmates
+
+	* t/1.t (1.14): Test for new transform argument.
+
+2004-06-16 22:12  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.15): Renamed _lookup_style to get_style,
+	updated transform method to accept style prefs for easier
+	per-document alteration of prefs. Removed single quotes from hash
+	keys. Example use of transform to set style and parameters.
+
+2004-06-15 21:29  jmates
+
+	* t/1.t (1.13): Test fo stylesheet not being found.
+
+2004-06-15 21:28  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.14): Test that stylesheet files actually
+	exist.
+
+2004-06-12 19:00  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.13), t/1.t (1.12): Fixes on configuration
+	of XML::LibXML and XML::LibXSLT, plus tests on them. Improved
+	internal code documentation.
+
+2004-06-12 18:40  jmates
+
+	* t/1.t (1.11): Updated tests for new methods.
+
+2004-06-12 18:40  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.12): The parse() method now returns the
+	document (LibXML) to the caller.  Merged get_* into single
+	docheaders() method. Expanded example usage code in the POD.
+
+2004-06-12 13:41  jmates
+
+	* t/1.t (1.10): Fix on errorstring due to new debugstring method
+	handling.
+
+2004-06-12 13:41  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.11): Added 'debugstring' method to obtain
+	errors from the parsers as otherwise errorstring might contain
+	binary data and need to be escaped.
+
+2004-06-12 13:40  jmates
+
+	* META.yml (1.1): Import.
+
+2004-06-12 13:39  jmates
+
+	* MANIFEST (1.7): Added META.yml.
+
+2004-06-12 00:00  jmates
+
+	* t/1.t (1.9): Test on parameter passing.
+
+2004-06-12 00:00  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.10): Properly quote parameters with
+	xpath_to_string() routine.
+
+2004-06-11 23:59  jmates
+
+	* style/test/param.xsl (1.2): No newline for easier comparison.
+
+2004-06-11 23:55  jmates
+
+	* MANIFEST (1.6): Added param.xsl for parameter testing.
+
+2004-06-11 23:53  jmates
+
+	* style/test/param.xsl (1.1): To print a passed paramater.
+
+2004-06-11 23:31  jmates
+
+	* t/1.t (1.8): Test code for new transform() method.
+
+2004-06-11 23:30  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.9): Wrote transform method and associated
+	_lookup_style to support XSLT transformations. Kluge changes to
+	parse routine to work with new transform method. Updated
+	documentation, made other code tweaks.
+
+2004-06-11 08:41  jmates
+
+	* t/1.t (1.7): Code to test new config() method.
+
+2004-06-11 08:41  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.8): Renamed configure methods to config.
+	Updated config to return prefs if no arguments given.
+
+2004-06-09 22:50  jmates
+
+	* t/pi.xml (1.1): Test file with multiple Processing Intructions.
+
+2004-06-09 22:49  jmates
+
+	* MANIFEST (1.5): New supporting files added.
+
+2004-06-09 22:45  jmates
+
+	* style/test/broken.xsl (1.1): Broken stylesheet.
+
+2004-06-09 22:39  jmates
+
+	* style/test/default.xsl (1.3): A working "do nothing" stylesheet.
+	Well, most all nothing, as it eats certain whitespace between
+	elements (xslt option for that?) and XSLT does not have access to
+	DOCTYPE stuff.
+
+2004-06-09 22:32  jmates
+
+	* style/test/default.xsl (1.2): Changed to be "do nothing"
+	template.
+
+2004-06-09 22:31  jmates
+
+	* style/test/default.xsl (1.1): Should change "xml" element into
+	"mungedxml".
+
+2004-06-09 01:55  jmates
+
+	* t/1.t (1.6): Tests for improvements.
+
+2004-06-09 01:55  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.7): Got get_PIs to work. Added list vs.
+	scalar handling to get_* routines to return Node objects if
+	requested. Improved documentation. Tweaks and Perltidy.
+
+2004-06-08 21:28  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.6): Clarified what get_PI does, comment
+	changes, POD fix.
+
+2004-02-21 21:14  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.5), t/1.t (1.5), t/x.xml (1.2): Improved
+	code to get document root, doctype.
+
+2004-02-06 14:07  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.4): Using query_xpath for finding root
+	node, commit of in-progress work.
+
+2004-01-27 05:33  jmates
+
+	* MANIFEST (1.4), lib/XML/ApplyXSLT/Document.pm (1.3): Removed
+	XML::ApplyXSLT::Document in favor of keeping parsed XML file in
+	primary module object instead.
+
+2004-01-27 05:31  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.3), lib/XML/ApplyXSLT/Document.pm (1.2),
+	t/1.t (1.4): Added untested configure methods for setting module
+	and supporting module options. The parse() method now stores
+	resulting XML document in XML::ApplyXSLT instead of a new
+	XML::ApplyXSLT::Document object. Started work on various get_*
+	methods to obtain requested information from parsed XML file.
+
+2004-01-24 11:50  jmates
+
+	* MANIFEST (1.3): Updated to reflect recent file layout changes.
+
+2004-01-24 11:42  jmates
+
+	* lib/XML/ApplyXSLT/: Document.pm (1.1), XMLDocument.pm (1.3):
+	Renamed XMLDocument to Document.
+
+2004-01-24 11:41  jmates
+
+	* lib/XML/ApplyXSLT.pm (1.2), lib/XML/ApplyXSLT/XMLDocument.pm
+	(1.2), t/1.t (1.3): Renamed XMLDocument to Document for returned
+	parse of XML.
+
+2004-01-24 10:47  jmates
+
+	* ApplyXSLT.pm (1.3), MANIFEST (1.2), Makefile.PL (1.2),
+	lib/XML/ApplyXSLT.pm (1.1), lib/XML/ApplyXSLT/XMLDocument.pm (1.1):
+	Moved module files under lib directory; added
+	XML::ApplyXSLT::XMLDocument to wrap XML::LibXML (or whatever in
+	future).
+
+2004-01-23 11:03  jmates
+
+	* ApplyXSLT.pm (1.2), t/1.t (1.2), t/x.xml (1.1): Added parse and
+	errorstring methods, along with tests of such.
+
+2004-01-22 00:21  jmates
+
+	* ApplyXSLT.pm (1.1), Changes (1.1), MANIFEST (1.1), Makefile.PL
+	(1.1), README (1.1), t/1.t (1.1), t/pod.t (1.1): Import of
+	out-of-version control work (h2xs plus initial tweaks and tests).
+

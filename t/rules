@@ -1,0 +1,5 @@
+# $Id: rules,v 1.1 2004/06/19 02:20:50 jmates Exp $
+#
+# test ruleset for processing of XML documents
+suffix not eq "xml" ignore
+rootname eq "xml" stop class=test style=default

@@ -1,0 +1,5 @@
+<!-- $Id: xml.dtd,v 1.1 2004/06/20 22:31:15 jmates Exp $ -->
+<!-- For testing of DOCTYPE SYSTEM entries -->
+<!ELEMENT xml (foo, bar)>
+<!ELEMENT foo (#PCDATA)>
+<!ELEMENT bar (#PCDATA)>

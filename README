@@ -1,0 +1,26 @@
+XML/ApplyXSLT 
+
+$Id: README,v 1.2 2004/09/26 18:27:21 jmates Exp $
+
+For documentation on this module, see the POD in the main module file,
+or the example code under the t directory.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  XML::LibXML XML::LibXSLT
+
+COPYRIGHT AND LICENCE
+
+The author disclaims all copyrights and releases this module into the
+public domain.

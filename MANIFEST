@@ -1,0 +1,17 @@
+lib/XML/ApplyXSLT.pm
+lib/XML/ApplyXSLT/Apache.pm
+Changes
+Makefile.PL
+MANIFEST
+META.yml
+README
+style/test/broken.xsl
+style/test/default.xsl
+style/test/param.xsl
+t/1.t
+t/pi.xml
+t/pod.t
+t/rules
+t/test.html
+t/xml.dtd
+t/x.xml
