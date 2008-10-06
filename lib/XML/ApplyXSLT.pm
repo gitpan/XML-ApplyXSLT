@@ -1,4 +1,4 @@
-# $Id: ApplyXSLT.pm,v 1.35 2004/09/26 18:27:23 jmates Exp $
+# $Id: ApplyXSLT.pm,v 1.38 2008/10/06 01:01:35 jmates Exp $
 #
 # The author disclaims all copyrights and releases this module into the
 # public domain.
@@ -21,7 +21,7 @@ use File::Spec ();
 use XML::LibXML  ();
 use XML::LibXSLT ();
 
-our $VERSION = '0.42';
+our $VERSION = '0.50';
 
 my $suffix_char = '.';
 my $suffix_re   = qr/(?<!^)\./;
@@ -47,7 +47,7 @@ sub new {
 
 # alter or return prefs
 sub config {
-  my $self    = shift;
+  my $self = shift;
   my $default = shift || return $self->{default};
 
   $self->{default} = { %{ $self->{default} }, %$default };
@@ -57,23 +57,24 @@ sub config {
 
 # interface to configure XML::LibXML
 sub config_libxml {
-  my $self  = shift;
+  my $self = shift;
   my $prefs = shift || return;
 
   my %allowed;
   @allowed{
     qw(
-     validation
-     recover
-     expand_entities
-     keep_blanks
-     pedantic_parser
-     line_numbers
-     load_ext_dtd
-     complete_attributes
-     expand_xinclude
-     )
-   } = ();
+      validation
+      recover
+      expand_entities
+      keep_blanks
+      pedantic_parser
+      line_numbers
+      load_ext_dtd
+      complete_attributes
+      expand_xinclude
+      )
+    }
+    = ();
 
   for my $method ( grep exists $allowed{$_}, keys %$prefs ) {
     $self->{xmlp}->$method( $prefs->{$method} );
@@ -83,17 +84,18 @@ sub config_libxml {
 }
 
 sub config_libxslt {
-  my $self  = shift;
+  my $self = shift;
   my $prefs = shift || return;
 
   my %allowed;
   @allowed{
     qw(
-     max_depth
-     debug_callback
-     register_function
-     )
-   } = ();
+      max_depth
+      debug_callback
+      register_function
+      )
+    }
+    = ();
 
   for my $method ( grep exists $allowed{$_}, keys %$prefs ) {
     $self->{xslp}->$method( $prefs->{$method} );
@@ -142,7 +144,8 @@ sub parse {
 
   my $doc;
   eval {
-    $doc = $self->{xmlp}->$method( $method eq 'parse_string' ? $$what : $what );
+    $doc =
+      $self->{xmlp}->$method( $method eq 'parse_string' ? $$what : $what );
   };
   if ($@) {
     chomp $@;
@@ -158,11 +161,11 @@ sub parse {
 # document via file data or parsed document data
 sub rules {
   my $self = shift;
-  my $fh   = shift || return $self->{rules};
+  my $fh = shift || return $self->{rules};
 
   # TODO more sanity checking?
   my ( $line, @rules );
- RULE: while ( $line = <$fh> ) {
+RULE: while ( $line = <$fh> ) {
     next if $line =~ /^\s*$/;
     $line =~ s/^\s+//;
     next if $line =~ /^#/;
@@ -176,14 +179,14 @@ sub rules {
     }
 
     my @tokens;
-   UBLE: {
+  UBLE: {
       # non-quoted strings, backslashed quotes and whitespace allowed
       push( @tokens, $1 ), redo UBLE
-       if $line =~ m/ \G ( [^"'\s]+ ) \s* /cgx;
+        if $line =~ m/ \G ( [^"'\s]+ ) \s* /cgx;
 
       # single or double-quoted strings, backslashed quotes allowed
       push( @tokens, $2 ), redo UBLE
-       if $line =~ m/ \G (['"]) ((?: \\.|[^\\\1] )+) \1 \s* /cgx;
+        if $line =~ m/ \G (['"]) ((?: \\.|[^\\\1] )+) \1 \s* /cgx;
 
       last UBLE if $line =~ / \G $ /gcx;
 
@@ -222,7 +225,7 @@ sub rules {
         and ($tokens[0] eq 'stop'
           or $tokens[0] eq 'ignore'
           or $tokens[0] eq 'continue' )
-       ) {
+        ) {
         $rule{action} = shift @tokens;
       }
     }
@@ -255,7 +258,7 @@ sub apply_rules {
   my %default;
   my %param;
 
- RULE: for my $rule ( @{ $self->{rules} } ) {
+RULE: for my $rule ( @{ $self->{rules} } ) {
     my $topic = $rule->{subject};
 
     # test free rules can set defaults
@@ -263,18 +266,18 @@ sub apply_rules {
       and exists $subject->{$topic}
       and defined $subject->{$topic} ) {
       %default = ( %default, %{ $rule->{default} } )
-       if exists $rule->{default};
+        if exists $rule->{default};
       %param = ( %param, %{ $rule->{param} } )
-       if exists $rule->{param};
+        if exists $rule->{param};
 
       next RULE;
     }
 
-    my $match    = 0;
+    my $match = 0;
     my $consider =
-     ref $subject->{$topic} eq 'ARRAY'
-     ? $subject->{$topic}
-     : [ $subject->{$topic} ];
+      ref $subject->{$topic} eq 'ARRAY'
+      ? $subject->{$topic}
+      : [ $subject->{$topic} ];
 
     if ( $rule->{operator} eq 'eq' ) {
       for my $thingy (@$consider) {
@@ -302,9 +305,9 @@ sub apply_rules {
 
     # also set these on rule hits
     %default = ( %default, %{ $rule->{default} } )
-     if exists $rule->{default};
+      if exists $rule->{default};
     %param = ( %param, %{ $rule->{param} } )
-     if exists $rule->{param};
+      if exists $rule->{param};
 
     return \%default, \%param if $rule->{action} eq 'stop';
   }
@@ -428,7 +431,10 @@ sub study {
   my $parent   = shift;
 
   # merge file and XML document metadata for rule tests
-  my $filedata = defined $filename ? $self->filedata( $filename, $parent ) : {};
+  my $filedata =
+    defined $filename
+    ? $self->filedata( $filename, $parent )
+    : {};
   %$filedata = ( %$filedata, %{ $self->docdata($doc) } );
 
   return $filedata, $self->apply_rules($filedata);
@@ -437,12 +443,13 @@ sub study {
 # needs to return style "id" for caching, and then something suitable to
 # be fed to the parse routine (filename, handle, etc.)
 sub get_style {
-  my $self    = shift;
+  my $self = shift;
   my $default = shift || {};
 
   %$default = ( %{ $self->{default} }, %$default );
 
-  unless ( exists $default->{path} and defined $default->{path} ) {
+  unless ( exists $default->{path}
+    and defined $default->{path} ) {
     $self->{errorstring} = 'no style path set';
     return;
   }
@@ -495,7 +502,7 @@ sub transform {
   # TODO support for refresh when ondisk more recent, and support to
   # remove from cache if have too many stylesheets in memory?
   unless ( defined $stylesheet
-    and ref $stylesheet eq 'XML::LibXSLT::Stylesheet' ) {
+    and ref($stylesheet) =~ m/^XML::LibXSLT::Stylesheet/ ) {
 
     # geh, what if not a file in the future?  TODO move elsewhere
     unless ( -f $style_doc ) {
@@ -513,8 +520,9 @@ sub transform {
       $self->{errorstring} = 'could not parse XSLT stylesheet';
       return;
     }
+
     unless ( defined $stylesheet
-      and ref $stylesheet eq 'XML::LibXSLT::Stylesheet' ) {
+      and ref($stylesheet) =~ m/^XML::LibXSLT::Stylesheet/ ) {
       $self->{errorstring} = 'stylesheet not a XML::LibXSLT::Stylesheet';
       return;
     }
@@ -525,7 +533,7 @@ sub transform {
     $results = $stylesheet->transform( $doc,
       keys %{ $params{param} }
       ? XML::LibXSLT::xpath_to_string( %{ $params{param} } )
-      : () )
+      : () );
   };
   if ($@) {
     chomp $@;

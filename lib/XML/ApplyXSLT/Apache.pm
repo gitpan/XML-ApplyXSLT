@@ -1,4 +1,4 @@
-# $Id: Apache.pm,v 1.12 2004/09/26 18:27:25 jmates Exp $
+# $Id: Apache.pm,v 1.16 2006/07/12 02:39:48 jmates Exp $
 #
 # The author disclaims all copyrights and releases this module into the
 # public domain.
@@ -14,21 +14,21 @@ use 5.005;
 use strict;
 use warnings;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
-use Apache::Constants qw(:common);
+use Apache::Constants qw(:common REDIRECT);
 use Apache::File ();
 use Apache::Log  ();
 use Apache::URI  ();
 
-use Date::Parse ();
+#use Date::Parse ();
 
 use XML::ApplyXSLT ();
 my $xapply = XML::ApplyXSLT->new;
 
 # TODO allow different rules for different areas if need be?
 # TODO cache mtime on rules file for if-modified calc below or reloading needs?
-my $rules_file = Apache->server_root_relative('../conf/applyxslt-rules');
+my $rules_file = Apache->server_root_relative('conf/applyxslt-rules');
 
 if ( open my $rfh, "< $rules_file" ) {
   $xapply->rules($rfh);
@@ -50,37 +50,26 @@ sub handler {
   # TODO prolly need a few DECLINES here or have a httpd prefs to avoid
   # certain areas or types, pre-file-and-rules-parse?
   #return DECLINED if not defined $r->content_type;
-  return DECLINED if $r->content_type() eq 'httpd/unix-directory';
 
   my $file = $r->filename;
   my $uri  = Apache::URI->parse($r);
 
-  my %request_params;
-  my %request_defaults;
-
-  # set style from user agent string, if hit
-  # TODO load from prefs somehow
-  my @style2agent = (
-    lynx      => '^Lynx',
-    lynx      => '^Mozilla\/[123]\.',
-    safari    => 'AppleWebKit\/\w+',
-    valid     => '^W3C_Validator',
-    omniweb   => 'OmniWeb',
-    opera     => '^Opera\/\d',
-    msiemac   => '^MSIE.+?Mac',
-    mozmac    => '^Mozilla\/.+?Macintosh.+?Gecko'
-  );
-  my $ua = $r->headers_in->get('User-Agent');
-  if ( defined $ua and $ua ne '' ) {
-    for ( my $i = 0; $i < $#style2agent; $i += 2 ) {
-      if ( $ua =~ m/ $style2agent[$i+1] /x ) {
-        $request_defaults{style} = $style2agent[$i];
-        last;
-      }
+  #return DECLINED if $r->content_type() eq 'httpd/unix-directory';
+  # KLUGE work around Apache internal redirect on bare directories
+  if ($r->content_type() eq 'httpd/unix-directory' ) {
+    if ( $r->uri =~ m{/$} ) {
+      return DECLINED;
+    } else {
+      sleep 3;
+      $r->headers_out->set(Location => 'http://sial.org' . $uri->path . '/' );
+      return REDIRECT;
     }
   }
 
-  my %param = $r->args;
+  my %request_params;
+  my %request_defaults;
+
+  my %param = $r->args || ();
 
   # set style from query string, if possible
   for my $param (%param) {
@@ -155,7 +144,7 @@ sub handler {
   # TODO improve this, need to include mtime of rules and stylesheet ideally
   #  $r->update_mtime( (stat $r->finfo)[9] );
   #  $r->update_mtime(
-  #    Date::Parse::str2time( substr q$Date: 2004/09/26 18:27:25 $, 6 ) );
+  #    Date::Parse::str2time( substr q$Date: 2006/07/12 02:39:48 $, 6 ) );
   $r->set_last_modified( ( stat $r->finfo )[9] );
 
   # TODO load this from prefs somehow?

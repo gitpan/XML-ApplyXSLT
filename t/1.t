@@ -1,4 +1,4 @@
-# $Id: 1.t,v 1.20 2004/07/20 00:55:02 jmates Exp $
+# $Id: 1.t,v 1.22 2008/10/06 00:59:47 jmates Exp $
 #
 # Initial "does it load and perform basic operations" tests
 
@@ -117,6 +117,7 @@ cmp_ok( $data->{'path'}, 'eq', $path, 'Read preferences back out' );
 
 ok( open( RULES, '< t/rules' ), 'open rules file' );
 ok( $xapply->rules( \*RULES ), 'load rules' );
+close(RULES);
 
 $response = $xapply->parse('t/x.xml') || diag $xapply->errorstring;
 
@@ -140,14 +141,14 @@ ok( eq_hash( $defaults, { class => 'test', style => 'default' } ),
 {
   $xapply->config( { style => 'broken' } );
   my $docref = $xapply->transform;
-  cmp_ok( $docref, 'eq', undef, 'Transformation failure check' )
+  ok( !defined $docref, 'Transformation failure check' )
    || diag $xapply->errorstring;
 }
 
 {
   $xapply->config( { style => 'nosuchstylefile' } );
   my $docref = $xapply->transform($response);
-  cmp_ok( $docref, 'eq', undef, 'Transformation failure check' )
+  ok( !defined $docref, 'Transformation failure check' )
    || diag $xapply->errorstring;
 }
 
