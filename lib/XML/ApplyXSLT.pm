@@ -1,4 +1,4 @@
-# $Id: ApplyXSLT.pm,v 1.38 2008/10/06 01:01:35 jmates Exp $
+# $Id: ApplyXSLT.pm,v 1.39 2009/03/05 04:25:24 jmates Exp $
 #
 # The author disclaims all copyrights and releases this module into the
 # public domain.
@@ -21,7 +21,7 @@ use File::Spec ();
 use XML::LibXML  ();
 use XML::LibXSLT ();
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 my $suffix_char = '.';
 my $suffix_re   = qr/(?<!^)\./;

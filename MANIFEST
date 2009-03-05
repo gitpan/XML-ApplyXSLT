@@ -1,6 +1,7 @@
 lib/XML/ApplyXSLT.pm
 lib/XML/ApplyXSLT/Apache.pm
 Changes
+LICENSE
 Makefile.PL
 MANIFEST
 META.yml
