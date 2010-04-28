@@ -1,6 +1,9 @@
-# $Id: 1.t,v 1.22 2008/10/06 00:59:47 jmates Exp $
+# $Id: 1.t,v 1.24 2010/04/28 21:44:47 jmates Exp $
 #
 # Initial "does it load and perform basic operations" tests
+
+use warnings;
+use strict;
 
 use Test::More 'no_plan';
 BEGIN { use_ok('XML::ApplyXSLT') }
@@ -20,7 +23,7 @@ ok( $xapply->config_libxslt( { max_depth => 1000 } ),
 
 # a failed parse, to test errorstring
 my $notxml = 'this string is not XML';
-$response = $xapply->parse( \$notxml );
+my $response = $xapply->parse( \$notxml );
 ok( !$response, 'XML parse failed on invalid XML' );
 
 # this error message comes from module itself

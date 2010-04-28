@@ -1,4 +1,4 @@
-# $Id: ApplyXSLT.pm,v 1.39 2009/03/05 04:25:24 jmates Exp $
+# $Id: ApplyXSLT.pm,v 1.42 2010/04/28 08:25:59 jmates Exp $
 #
 # The author disclaims all copyrights and releases this module into the
 # public domain.
@@ -21,7 +21,7 @@ use File::Spec ();
 use XML::LibXML  ();
 use XML::LibXSLT ();
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 my $suffix_char = '.';
 my $suffix_re   = qr/(?<!^)\./;
@@ -542,7 +542,7 @@ sub transform {
     return;
   }
 
-  my $rendered = \$stylesheet->output_string($results);
+  my $rendered = \$stylesheet->output_as_bytes($results);
 
   my %details;
   $details{encoding}   = $stylesheet->output_encoding;
@@ -676,7 +676,8 @@ find the location of the stylesheet to use.
 =item B<transform>
 
 Transforms XML::LibXML document with XML:::LibXSLT after looking up the
-stylesheet to use via B<get_style> based of off 'default' data.
+stylesheet to use via B<get_style> based of off 'default' data. Uses
+the C<output_as_bytes> method to produce the output document.
 
 =item B<query_xpath>
 
